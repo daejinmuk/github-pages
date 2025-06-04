@@ -59,7 +59,7 @@ function mapGenerator(name, la,lo){
     var contentString = [
         '<div>',
         '   <h5>'+name+'</h5><br>',
-        '   <a target="_blank" href="http://map.naver.com/search/가좌동'+name+'" >네이버 지도 바로 가기</a>',
+        '   <a target="_blank" href="http://map.naver.com/search/'+name+'" >네이버 지도 바로 가기</a>',
         '</div>'
     ].join('');
   }
