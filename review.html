@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/screens/review.css">
+  <title>리뷰 남기기</title>
+  <meta name="description" content="대진먹거리 리뷰 작성 페이지">
+  <link rel="shortcut icon" href="css/image/favicon.ico">
+  <script src="https://kit.fontawesome.com/b7f69e0a07.js" crossorigin="anonymous"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+    }
+    /* 간소화된 폼 레이아웃 */
+    main.review-form-container {
+      padding-top: 80px; /* 헤더(60px) + 여유(20px) */
+      display: flex; justify-content: center; align-items: flex-start;
+      min-height: calc(100vh - 80px);
+    }
+    .review-form {
+      width: 100%; max-width: 500px;
+      background-color: #fff; padding: 30px 40px; border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .review-form h2 {
+      margin-top: 0; margin-bottom: 20px; font-size: 1.6rem; text-align: center; color: #333;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block; margin-bottom: 6px; font-size: 0.95rem; color: #555;
+    }
+    .form-group select,
+    .form-group input,
+    .form-group textarea {
+      width: 100%; padding: 10px 12px; border: 1px solid #ccc;
+      border-radius: 4px; font-size: 1rem; box-sizing: border-box;
+    }
+    .form-group textarea { resize: vertical; }
+    .submit-btn {
+      width: 100%; padding: 12px; font-size: 1rem;
+      background-color: #007BFF; color: #fff; border: none; border-radius: 4px;
+      cursor: pointer; margin-top: 10px;
+    }
+    .submit-btn:hover { background-color: #0056b3; }
+  </style>
+</head>
+<body>
+  <!-- ① 상단 고정바 -->
+  <header class="top-bars">
+    <span class="top-bars__title title-logo">
+      <a href="index.html">대진먹거리</a>
+    </span>
+    <nav class="top-bars__menus">
+      <span class="top-bars__menu">
+        <i class="fa-solid fa-bars fa-lg"></i>
+      </span>
+    </nav>
+  </header>
+
+  <!-- ② 숨겨진 메뉴 (index.html과 동일 구조) -->
+  <nav class="menu-bars__container invisible">
+    <span class="menu-bars__title title-logo">
+      <a href="index.html">ㄷㅈㅁㄱㄹ</a>
+    </span>
+    <span class="menu-bars__btn__close">
+      <i class="fa-solid fa-x fa-lg"></i>
+    </span>
+    <ul class="menu-bars">
+      <li class="menu-bar preparing"><span>홈</span></li>
+      <a href="index.html">
+        <li class="menu-bar"><span>맛집 리스트</span></li>
+      </a>
+      <a href="review.html">
+        <li class="menu-bar"><span>리뷰 작성</span></li>
+      </a>
+    </ul>
+  </nav>
+
+  <!-- ③ 리뷰 폼 메인 영역 -->
+  <main class="review-form-container">
+    <form action="#" method="post" class="review-form" id="reviewForm">
+      <h2>리뷰 남기기</h2>
+
+      <!-- 1) 카테고리 선택 드롭다운 -->
+      <div class="form-group">
+        <label for="categorySelect">카테고리 선택 <span style="color:#e74c3c;">*</span></label>
+        <select id="categorySelect" required>
+          <option value="" disabled selected>카테고리를 선택하세요</option>
+          <!-- 아래 value 값들이 반드시 아래 restaurantsByCategory 객체의 키와 일치해야 합니다 -->
+          <option value="한식">한식</option>
+          <option value="중식">중식</option>
+          <option value="일식">일식</option>
+          <option value="양식">양식</option>
+          <option value="고기">고기</option>
+          <option value="분식">분식</option>
+          <option value="카페/디저트">카페/디저트</option>
+          <option value="야식">야식</option>
+          <option value="기타">기타</option>
+        </select>
+      </div>
+
+      <!-- 2) 식당 선택 드롭다운 (초기에는 비활성화 상태) -->
+      <div class="form-group">
+        <label for="restaurantSelect">식당 선택 <span style="color:#e74c3c;">*</span></label>
+        <select id="restaurantSelect" name="restaurant" disabled required>
+          <option value="" disabled selected>카테고리를 먼저 선택하세요</option>
+        </select>
+      </div>
+
+      <!-- 3) 사용자 이름 입력 -->
+      <div class="form-group">
+        <label for="name">이름 <span style="color:#e74c3c;">*</span></label>
+        <input type="text" id="name" name="name" required placeholder="이름을 입력하세요">
+      </div>
+
+      <!-- 4) 이메일 입력 -->
+      <div class="form-group">
+        <label for="email">이메일 <span style="color:#e74c3c;">*</span></label>
+        <input type="email" id="email" name="email" required placeholder="이메일을 입력하세요">
+      </div>
+
+      <!-- 5) 평점 선택 -->
+      <div class="form-group">
+        <label for="rating">평점 <span style="color:#e74c3c;">*</span></label>
+        <select id="rating" name="rating" required>
+          <option value="" disabled selected>평점을 선택하세요</option>
+          <option value="5">⭐️⭐️⭐️⭐️⭐️ 5점</option>
+          <option value="4">⭐️⭐️⭐️⭐️ 4점</option>
+          <option value="3">⭐️⭐️⭐️ 3점</option>
+          <option value="2">⭐️⭐️ 2점</option>
+          <option value="1">⭐️ 1점</option>
+        </select>
+      </div>
+
+      <!-- 6) 리뷰 내용 -->
+      <div class="form-group">
+        <label for="comments">리뷰 내용 <span style="color:#e74c3c;">*</span></label>
+        <textarea id="comments" name="comments" rows="5" required placeholder="리뷰를 작성해주세요"></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn">제출하기</button>
+    </form>
+  </main>
+
+  <!-- ④ JavaScript: index.html에서 식당을 가져와 카테고리별로 분류 -->
+  <script src="javascript/menubtn.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const categorySelect = document.getElementById('categorySelect');
+      const restaurantSelect = document.getElementById('restaurantSelect');
+
+      // 1) 모든 카테고리 키를 정의 (index.html에 있는 data-type 속성과 정확히 일치해야 합니다)
+      const restaurantsByCategory = {
+        '한식': new Set(),
+        '중식': new Set(),
+        '일식': new Set(),
+        '양식': new Set(),
+        '고기': new Set(),
+        '분식': new Set(),
+        '카페/디저트': new Set(),
+        '야식': new Set(),
+        '기타': new Set(),
+      };
+
+      // 2) index.html을 fetch하여, data-type 값을 기준으로 Set에 식당명을 저장
+      fetch('index.html')
+        .then(res => {
+          if (!res.ok) throw new Error('index.html 로딩 실패');
+          return res.text();
+        })
+        .then(htmlText => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(htmlText, 'text/html');
+          doc.querySelectorAll('.restaurant-list').forEach(item => {
+            const type = item.getAttribute('data-type'); // 예: "한식", "중식", "카페/디저트" 등
+            const nameEl = item.querySelector('.restaurant-list__textBox__name');
+            if (
+              type &&
+              nameEl &&
+              // restaurantsByCategory에 해당 키가 있는지 확인
+              restaurantsByCategory.hasOwnProperty(type)
+            ) {
+              restaurantsByCategory[type].add(nameEl.textContent.trim());
+            }
+          });
+        })
+        .catch(err => {
+          console.error(err);
+        });
+
+      // 3) 카테고리 선택 시 해당 Set에서 옵션을 채워줌
+      categorySelect.addEventListener('change', () => {
+        const selectedCategory = categorySelect.value;
+
+        // 이전 옵션들 삭제
+        restaurantSelect.innerHTML = '';
+
+        // 선택된 카테고리가 객체 키로 있는지 확인
+        const setForCategory = restaurantsByCategory[selectedCategory];
+        if (!setForCategory || setForCategory.size === 0) {
+          // 식당이 하나도 없으면 안내 메시지
+          const opt = document.createElement('option');
+          opt.value = '';
+          opt.textContent = '등록된 식당이 없습니다';
+          opt.disabled = true;
+          restaurantSelect.appendChild(opt);
+          restaurantSelect.disabled = true;
+        } else {
+          // “식당을 선택하세요” placeholder
+          const placeholder = document.createElement('option');
+          placeholder.value = '';
+          placeholder.textContent = '식당을 선택하세요';
+          placeholder.disabled = true;
+          placeholder.selected = true;
+          restaurantSelect.appendChild(placeholder);
+
+          // setForCategory 안의 이름들로 옵션 생성
+          setForCategory.forEach(name => {
+            const opt = document.createElement('option');
+            opt.value = name;
+            opt.textContent = name;
+            restaurantSelect.appendChild(opt);
+          });
+          restaurantSelect.disabled = false;
+        }
+      });
+
+      // 4) 리뷰 폼 제출 시 동작 (백엔드 연동 시 수정)
+      document.getElementById('reviewForm').addEventListener('submit', e => {
+        e.preventDefault();
+        const f = e.target;
+        const data = {
+          category: categorySelect.value,
+          restaurant: restaurantSelect.value,
+          name: f.name.value,
+          email: f.email.value,
+          rating: f.rating.value,
+          comments: f.comments.value
+        };
+        console.log('제출 데이터:', data);
+        alert(
+          `카테고리: ${data.category}\n` +
+          `식당: ${data.restaurant}\n` +
+          `평점: ${data.rating}\n` +
+          `리뷰: ${data.comments}`
+        );
+        f.reset();
+        restaurantSelect.disabled = true;
+      });
+    });
+  </script>
+</body>
+</html>
